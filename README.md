@@ -7,15 +7,14 @@
 - 事件循环, 检测`KEYDOWN`事件
 - 打印属性`event.key`
 
-## 屏幕
+## 初始化函数
+
+### 屏幕
 
 - 创建一个screen
-- 创建一个background
 - 填充颜色
 
-## 显示按键
-
-## 字体
+### 字体
 
 - 创建某一大小的字体
 
@@ -35,10 +34,9 @@
 
 1. 初始化
     - 屏幕
-    - 背景
     - 字体
 2. 主循环
     - 捕获事件并判断
         1. 如果是QUIT, 就退出
         2. 如果是KEYDOWN, 就根据`event.key`生成文本并渲染显示
-3. `screen.blit()` 和 `pygame.display.flip()`
+3. `pygame.display.flip()`
