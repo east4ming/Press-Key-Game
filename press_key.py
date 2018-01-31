@@ -11,55 +11,63 @@ import sys
 import random
 
 
-if not pygame.font: print ('Warning, fonts disabled')
+if not pygame.font:
+    print('Warning, fonts disabled')
 
-def show_key(event, font, background):
-    """根据event.key生成文本并渲染, 确定位置, 返回文本和位置"""
+
+def init():
+    """() -> (screen, font)
+
+    初始化: pygame, screen surface, font
+    返回: screen, font
+    """
+    pygame.init()
+    # create screen
+    screen = pygame.display.set_mode((800, 600))
+    pygame.display.set_caption("Press Key")
+    screen.fill((250, 250, 250))
+    # create font
+    font = pygame.font.Font(None, 120)
+    return screen, font
+
+
+def show_pressed_key(event, font, screen):
+    """(event, font, screen) -> None
+
+    根据event.key生成文本并渲染, 确定位置, 并显示
+    """
     if pygame.font:
         text = font.render(pygame.key.name(event.key), 1, (random.randint(0, 255),
                                                            random.randint(0, 255),
                                                            random.randint(0, 255)))
-        textpos = text.get_rect(centerx=random.randint(0, background.get_width()),
-                                centery=random.randint(0, background.get_height()))
-        return (text, textpos)
+        textpos = text.get_rect(centerx=random.randint(0, screen.get_width()),
+                                centery=random.randint(0, screen.get_height()))
+        # 如果要显示所有按过的键, 注释掉下边一行
+        screen.fill((250, 250, 250))
+        # screen.fill((random.randint(0, 255),
+        #              random.randint(0, 255),
+        #              random.randint(0, 255)))
+        screen.blit(text, textpos)
+
 
 def main():
-    """main
+    """main func.
 
-    - 初始化
+    - 初始化(调用`init()`函数)
     - 主循环
         - 捕获事件并判断
-            - 如果是KEYDOWN就显示屏幕上
-        - screen.blit
+            - 如果是KEYDOWN就显示屏幕上(调用`show_pressed_key()`函数)
         - flip
     """
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-    pygame.display.set_caption("Press Key")
-    # Create The Backgound
-    background = pygame.Surface(screen.get_size())
-    background = background.convert()
-    background.fill((250, 250, 250))
-    # font
-    font = pygame.font.Font(None, 120)
+    screen, font = init()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 # 在屏幕上显示对应的key
-                # print(event.key)
-                # Put Text On The Background, Centered
-                font_tuple = show_key(event, font, background)
-                # 如果要显示所有按过的键, 注释掉下边一行
-                background.fill((250, 250, 250))
-                # background.fill((random.randint(0, 255),
-                #                random.randint(0, 255),
-                #                random.randint(0, 255)))
-                background.blit(*font_tuple)
+                show_pressed_key(event, font, screen)
 
-
-        screen.blit(background, (0, 0))
         pygame.display.flip()
 
 
